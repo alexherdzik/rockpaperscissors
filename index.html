@@ -6,7 +6,44 @@
     </head>
     <body>        
         <script>
+            const moves = ["rock", "paper", "scissors"];
+            const playerSelection = 'rock';
 
+            function computerPlay() {
+                return moves[Math.floor(Math.random() * moves.length)];
+            }
+
+            function playRound(playerSelection, computerSelection) {
+                if (!moves.includes(playerSelection.toLowerCase())) {
+                    return `${playerSelection} is not a valid move.`;
+                }
+
+                if ((playerSelection.toLowerCase() === 'rock' && computerSelection === 'scissors')
+                   || (playerSelection.toLowerCase() === 'scissors' && computerSelection === 'paper')
+                   || (playerSelection.toLowerCase() === 'paper' && computerSelection === 'rock')) {
+                       return `You win! ${playerSelection} beats ${computerSelection}.`;
+                   } else if (playerSelection.toLowerCase() !== computerSelection.toLowerCase()) {
+                       return `You lose! ${computerSelection} beats ${playerSelection}.`;
+                   } else {
+                       return `It's a draw.`;
+                   }
+            }
+
+            function game() {
+                let playerScore = 0;
+                let computerScore = 0;
+
+                for (let i = 0; i < 5; i++) {
+                    const result = playRound(prompt('enter move choice'), computerPlay());
+                    if (result.includes('win')) {
+                        playerScore++;
+                    } else if (result.includes('lose')) {
+                        computerScore++;
+                    }
+                    console.log(result);
+                }
+                console.log(`Final score - Player: ${playerScore} Computer: ${computerScore}`);
+            }
         </script>
     </body>
 </html>
