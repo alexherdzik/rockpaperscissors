@@ -13,13 +13,13 @@
         <div>Computer: <span id='computer-score'>0</span></div>
         <script>
             const moves = ["rock", "paper", "scissors"];
-
             const moveBtns = document.querySelectorAll(".move");
+            
             moveBtns.forEach(moveBtn => {
                 const playerSelection = moveBtn.getAttribute('data-move');
                 moveBtn.addEventListener('click', () => {
                     const results = document.querySelector('#results');
-                    results.textContent = playRound(playerSelection, computerPlay());
+                    results.textContent = playRound(playerSelection);
                 });
             });
 
@@ -27,14 +27,12 @@
                 return moves[Math.floor(Math.random() * moves.length)];
             }
 
-            function playRound(playerSelection, computerSelection) {
-                if (!moves.includes(playerSelection.toLowerCase())) {
-                    return `${playerSelection} is not a valid move.`;
-                }
+            function playRound(playerSelection) {
+                const computerSelection = computerPlay();
 
-                if ((playerSelection.toLowerCase() === 'rock' && computerSelection === 'scissors')
-                   || (playerSelection.toLowerCase() === 'scissors' && computerSelection === 'paper')
-                   || (playerSelection.toLowerCase() === 'paper' && computerSelection === 'rock')) {
+                if ((playerSelection === 'rock' && computerSelection === 'scissors')
+                   || (playerSelection === 'scissors' && computerSelection === 'paper')
+                   || (playerSelection === 'paper' && computerSelection === 'rock')) {
                        return `You win! ${playerSelection} beats ${computerSelection}.`;
                    } else if (playerSelection.toLowerCase() !== computerSelection.toLowerCase()) {
                        return `You lose! ${computerSelection} beats ${playerSelection}.`;
@@ -43,20 +41,33 @@
                    }
             }
 
-            function game() {
+           /* function game() {
                 let playerScore = 0;
                 let computerScore = 0;
 
-                for (let i = 0; i < 5; i++) {
-                    const result = playRound(prompt('enter move choice'), computerPlay());
-                    if (result.includes('win')) {
-                        playerScore++;
-                    } else if (result.includes('lose')) {
-                        computerScore++;
-                    }
-                    console.log(result);
+                const result = playRound(prompt('enter move choice'), computerPlay());
+                if (result.includes('win')) {
+                    playerScore++;
+                } else if (result.includes('lose')) {
+                    computerScore++;
                 }
-                console.log(`Final score - Player: ${playerScore} Computer: ${computerScore}`);
+            } */
+
+            function updateScore(playerScore, computerScore) {
+                document.querySelector('#player-score').textContent = playerScore;
+                document.querySelector('#computer-score').textContet = computerScore;
+            }
+
+            function checkWinner(playerScore, computerScore, scoreToWin) {
+                return Math.max(playerScore, computerScore) >= scoreToWin;
+            }
+
+            function displayWinner(playerScore, computerScore) {
+                if (playerScore > computerScore) {
+                    alert('Player wins!');
+                } else {
+                    alert('Computer wins!');
+                }
             }
         </script>
     </body>
