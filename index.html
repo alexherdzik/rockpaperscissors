@@ -14,14 +14,17 @@
         <script>
             const moves = ["rock", "paper", "scissors"];
             const moveBtns = document.querySelectorAll(".move");
-            
+
             moveBtns.forEach(moveBtn => {
                 const playerSelection = moveBtn.getAttribute('data-move');
                 moveBtn.addEventListener('click', () => {
-                    const results = document.querySelector('#results');
-                    results.textContent = playRound(playerSelection);
+                    playRound(playerSelection);
                 });
             });
+
+            let playerScore = 0;
+            let computerScore = 0;
+            const scoreToWin = 5;
 
             function computerPlay() {
                 return moves[Math.floor(Math.random() * moves.length)];
@@ -33,29 +36,31 @@
                 if ((playerSelection === 'rock' && computerSelection === 'scissors')
                    || (playerSelection === 'scissors' && computerSelection === 'paper')
                    || (playerSelection === 'paper' && computerSelection === 'rock')) {
-                       return `You win! ${playerSelection} beats ${computerSelection}.`;
-                   } else if (playerSelection.toLowerCase() !== computerSelection.toLowerCase()) {
-                       return `You lose! ${computerSelection} beats ${playerSelection}.`;
+                       playerScore++;
+                       updateResults(`You win! ${playerSelection} beats ${computerSelection}.`);
+                   } else if (playerSelection !== computerSelection) {
+                       computerScore++;
+                       updateResults(`You lose! ${computerSelection} beats ${playerSelection}.`);
                    } else {
-                       return `It's a draw.`;
+                       updateResults(`Both chose ${playerSelection}. It's a draw.`);
                    }
+                    updateScore(playerScore, computerScore);
+
+                    if (checkWinner(playerScore, computerScore, scoreToWin)) {
+                        displayWinner(playerScore, computerScore);
+                        playerScore = 0;
+                        computerScore = 0;
+                        updateScore(playerScore, computerScore);
+                    }
             }
-
-           /* function game() {
-                let playerScore = 0;
-                let computerScore = 0;
-
-                const result = playRound(prompt('enter move choice'), computerPlay());
-                if (result.includes('win')) {
-                    playerScore++;
-                } else if (result.includes('lose')) {
-                    computerScore++;
-                }
-            } */
+            
+            function updateResults(text) {
+                document.querySelector('#results').textContent = text;
+            }
 
             function updateScore(playerScore, computerScore) {
                 document.querySelector('#player-score').textContent = playerScore;
-                document.querySelector('#computer-score').textContet = computerScore;
+                document.querySelector('#computer-score').textContent = computerScore;
             }
 
             function checkWinner(playerScore, computerScore, scoreToWin) {
